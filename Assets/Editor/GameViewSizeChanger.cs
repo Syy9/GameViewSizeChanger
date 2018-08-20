@@ -61,7 +61,6 @@ namespace Syy.GameViewSizeChanger
 
         GameViewSizeGroupType GetCurrentGroupType()
         {
-            GameViewSizeGroupType type = GameViewSizeGroupType.Android;
             switch(EditorUserBuildSettings.activeBuildTarget)
             {
                 case BuildTarget.Android:
