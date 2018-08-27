@@ -26,4 +26,4 @@ Please rewrite "GameViewSizeChanger.cs" or Make a issue [GameViewSizeChanger iss
 
 ## Author
 
-[Syy12345-Unity](https://github.com/Syy12345-Unity)
+[Syy9](https://github.com/Syy9)
