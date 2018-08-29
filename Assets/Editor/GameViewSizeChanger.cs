@@ -107,7 +107,7 @@ namespace Syy.GameViewSizeChanger
             public GameViewSizeHelper.GameViewSize Convert()
             {
                 var gameViewSize = new GameViewSizeHelper.GameViewSize();
-                gameViewSize.type = GameViewSizeHelper.GameViewSizeType.AspectRatio;
+                gameViewSize.type = GameViewSizeHelper.GameViewSizeType.FixedResolution;
                 gameViewSize.baseText = GetLabel();
                 bool isPortrait = orientation == Orientation.Portrait;
                 int w = isPortrait ? Width : Height;
