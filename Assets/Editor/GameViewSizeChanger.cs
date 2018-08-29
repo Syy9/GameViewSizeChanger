@@ -15,6 +15,11 @@ namespace Syy.GameViewSizeChanger
             GetWindow<GameViewSizeChanger>();
         }
 
+        void OnEnable()
+        {
+            current = null;
+        }
+
         private static readonly SizeData[] presets = new SizeData[]
         {
             //iOS
@@ -29,16 +34,22 @@ namespace Syy.GameViewSizeChanger
         };
 
         static Orientation orientation;
+        static SizeData current;
 
         void OnGUI()
         {
             orientation = (Orientation)EditorGUILayout.EnumPopup("Orientation", orientation);
             foreach (var preset in presets)
             {
+                bool isCurrentGameViewSize = current != null && current == preset;
+                var defaultColor = GUI.color;
+                GUI.color = isCurrentGameViewSize ? Color.gray : defaultColor;
                 if (GUILayout.Button(preset.GetLabel()))
                 {
                     ChangeGameViewSize(preset);
+                    current = preset;
                 }
+                GUI.color = defaultColor;
             }
         }
 
@@ -104,6 +115,25 @@ namespace Syy.GameViewSizeChanger
                 gameViewSize.width = w;
                 gameViewSize.height = h;
                 return gameViewSize;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (obj == null || this.GetType() != obj.GetType())
+                {
+                    return false;
+                }
+
+                var cast = (SizeData) obj;
+                return this.Title == cast.Title 
+                    && this.Aspect == cast.Aspect 
+                    && this.Width == cast.Width 
+                    && this.Height == cast.Height;
+            }
+
+            public override int GetHashCode()
+            {
+                return int.Parse(this.Width.ToString() + "000" + this.Height.ToString());
             }
         }
 
