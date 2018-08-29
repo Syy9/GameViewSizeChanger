@@ -18,9 +18,9 @@ namespace Syy.GameViewSizeChanger
         private static readonly SizeData[] presets = new SizeData[]
         {
             //iOS
-            new SizeData() {Title="iPhoneX", Aspect="1:2", Width=1125, Height=2436, },
-            new SizeData() {Title="iPhone8", Aspect="9:16", Width=750, Height=1334, },
             new SizeData() {Title="iPhone4", Aspect="2:3", Width=640, Height=960, },
+            new SizeData() {Title="iPhone8", Aspect="9:16", Width=750, Height=1334, },
+            new SizeData() {Title="iPhoneX", Aspect="1:2", Width=1125, Height=2436, },
             new SizeData() {Title="iPad", Aspect="3:4", Width=768, Height=1024, },
             // Android
             new SizeData() {Title="GalaxyS8", Aspect="18.5：9", Width=1440, Height=2960, },
