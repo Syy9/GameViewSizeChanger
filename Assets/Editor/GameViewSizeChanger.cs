@@ -15,11 +15,6 @@ namespace Syy.GameViewSizeChanger
             GetWindow<GameViewSizeChanger>();
         }
 
-        void OnEnable()
-        {
-            current = null;
-        }
-
         private static readonly SizeData[] presets = new SizeData[]
         {
             //iOS
@@ -34,20 +29,21 @@ namespace Syy.GameViewSizeChanger
         };
 
         static Orientation orientation;
-        static SizeData current;
 
         void OnGUI()
         {
             orientation = (Orientation)EditorGUILayout.EnumPopup("Orientation", orientation);
             foreach (var preset in presets)
             {
-                bool isCurrentGameViewSize = current != null && current == preset;
+                var sizes = UnityStats.screenRes.Split('x');
+                var w = float.Parse(sizes[0]);
+                var h = float.Parse(sizes[1]);
+                bool isCurrentGameViewSize = preset.Width == w && preset.Height == h;
                 var defaultColor = GUI.color;
                 GUI.color = isCurrentGameViewSize ? Color.gray : defaultColor;
                 if (GUILayout.Button(preset.GetLabel()))
                 {
                     ChangeGameViewSize(preset);
-                    current = preset;
                 }
                 GUI.color = defaultColor;
             }
