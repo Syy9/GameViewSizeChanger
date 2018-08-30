@@ -44,9 +44,29 @@ namespace Syy.GameViewSizeChanger
                 if (GUILayout.Button(preset.GetLabel()))
                 {
                     ChangeGameViewSize(preset);
+                    EditorApplication.delayCall += () => {
+                        //Wait gameView size change completed
+                        EditorApplication.delayCall += () =>
+                        {
+                            UpdateGameViewSizeToMinScale();
+                            Repaint();
+                        };
+                    };
                 }
                 GUI.color = defaultColor;
             }
+        }
+
+        void UpdateGameViewSizeToMinScale()
+        {
+            var flag = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
+            var assembly = typeof(Editor).Assembly;
+            var type = assembly.GetType("UnityEditor.GameView");
+            EditorWindow gameView = EditorWindow.GetWindow(type);
+            var minScaleProperty = type.GetProperty("minScale", flag);
+            float minScale = (float) minScaleProperty.GetValue(gameView, null);
+            type.GetMethod("SnapZoom", flag, null, new System.Type[] { typeof(float) }, null).Invoke(gameView, new object[] { minScale });
+            EditorApplication.QueuePlayerLoopUpdate();
         }
 
         void ChangeGameViewSize(SizeData data)
