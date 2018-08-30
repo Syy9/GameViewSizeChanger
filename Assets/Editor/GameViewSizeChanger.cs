@@ -59,12 +59,7 @@ namespace Syy.GameViewSizeChanger
             var groupType = GetCurrentGroupType();
             if(!GameViewSizeHelper.Contains(groupType, gameViewSize))
             {
-                if(EditorUtility.DisplayDialog("Register new GameViewSize?", data.GetLabel(), "OK", "Cancel"))
-                {
-                    GameViewSizeHelper.AddCustomSize(groupType, gameViewSize);
-                } else {
-                    return;
-                }
+                GameViewSizeHelper.AddCustomSize(groupType, gameViewSize);
             }
             GameViewSizeHelper.ChangeGameViewSize(GetCurrentGroupType(), gameViewSize);
             Debug.Log("Changed GameViewSize! " + data.GetLabel());
