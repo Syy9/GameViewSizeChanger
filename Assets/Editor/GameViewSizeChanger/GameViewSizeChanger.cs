@@ -108,7 +108,6 @@ namespace Syy.GameViewSizeChanger
                 GameViewSizeHelper.AddCustomSize(groupType, gameViewSize);
             }
             GameViewSizeHelper.ChangeGameViewSize(GetCurrentGroupType(), gameViewSize);
-            Debug.Log("Changed GameViewSize! " + data.GetLabel());
         }
 
         GameViewSizeGroupType GetCurrentGroupType()
