@@ -32,7 +32,6 @@ namespace Syy.GameViewSizeChanger
 
         void OnGUI()
         {
-            orientation = (Orientation)EditorGUILayout.EnumPopup("Orientation", orientation);
             foreach (var preset in presets)
             {
                 var sizes = UnityStats.screenRes.Split('x');
@@ -55,6 +54,8 @@ namespace Syy.GameViewSizeChanger
                 }
                 GUI.color = defaultColor;
             }
+
+            orientation = (Orientation)EditorGUILayout.EnumPopup("Orientation", orientation);
         }
 
         void UpdateGameViewSizeToMinScale()
