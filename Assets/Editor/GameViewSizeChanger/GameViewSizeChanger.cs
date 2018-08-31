@@ -41,7 +41,7 @@ namespace Syy.GameViewSizeChanger
                 bool isCurrentGameViewSize = preset.Width == w && preset.Height == h;
                 var defaultColor = GUI.color;
                 GUI.color = isCurrentGameViewSize ? Color.gray : defaultColor;
-                if (GUILayout.Button(preset.GetLabel()))
+                if (GUILayout.Button(preset.GetLabel(), "box", GUILayout.ExpandWidth(true)))
                 {
                     ChangeGameViewSize(preset);
                     EditorApplication.delayCall += () => {
