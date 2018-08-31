@@ -82,7 +82,6 @@ namespace Syy.GameViewSizeChanger
                 EditorApplication.delayCall += () =>
                 {
                     UpdateGameViewSizeToMinScale();
-                    Repaint();
                     Focus();
                 };
             };
