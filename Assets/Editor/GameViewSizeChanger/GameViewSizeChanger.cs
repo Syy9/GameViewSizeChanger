@@ -12,7 +12,7 @@ namespace Syy.GameViewSizeChanger
         [MenuItem("Window/GameViewSizeChanger")]
         public static void Open()
         {
-            GetWindow<GameViewSizeChanger>();
+            GetWindow<GameViewSizeChanger>("GameViewSizeChanger");
         }
 
         private static readonly SizeData[] presets = new SizeData[]
