@@ -29,33 +29,63 @@ namespace Syy.GameViewSizeChanger
         };
 
         static Orientation orientation;
+        static int selectPresetIndex = 0;
 
         void OnGUI()
         {
-            foreach (var preset in presets)
+            for (int i = 0; i < presets.Length; i++)
             {
+                var preset = presets[i];
                 var sizes = UnityStats.screenRes.Split('x');
                 var w = float.Parse(sizes[0]);
                 var h = float.Parse(sizes[1]);
                 bool isCurrentGameViewSize = preset.Width == w && preset.Height == h;
                 var defaultColor = GUI.color;
-                GUI.color = isCurrentGameViewSize ? Color.gray : defaultColor;
+                if(isCurrentGameViewSize)
+                {
+                    GUI.color = isCurrentGameViewSize ? Color.gray : defaultColor;
+                    selectPresetIndex = i;
+                }
                 if (GUILayout.Button(preset.GetLabel(), "box", GUILayout.ExpandWidth(true)))
                 {
-                    ChangeGameViewSize(preset);
-                    EditorApplication.delayCall += () => {
-                        //Wait gameView size change completed
-                        EditorApplication.delayCall += () =>
-                        {
-                            UpdateGameViewSizeToMinScale();
-                            Repaint();
-                        };
-                    };
+                    StartGameViewSizeProcess(preset);
                 }
                 GUI.color = defaultColor;
             }
 
             orientation = (Orientation)EditorGUILayout.EnumPopup("Orientation", orientation);
+
+            var e = Event.current;
+            if (e.type == EventType.KeyDown)
+            {
+                if (e.keyCode == KeyCode.UpArrow)
+                {
+                    selectPresetIndex = Mathf.Max(0, selectPresetIndex - 1);
+                    StartGameViewSizeProcess(presets[selectPresetIndex]);
+                    e.Use();
+                }
+                else if (e.keyCode == KeyCode.DownArrow)
+                {
+                    selectPresetIndex = Mathf.Min(presets.Length - 1, selectPresetIndex + 1);
+                    StartGameViewSizeProcess(presets[selectPresetIndex]);
+                    e.Use();
+                }
+            }
+        }
+
+        void StartGameViewSizeProcess(SizeData preset)
+        {
+            ChangeGameViewSize(preset);
+            EditorApplication.delayCall += () =>
+            {
+                //Wait gameView size change completed
+                EditorApplication.delayCall += () =>
+                {
+                    UpdateGameViewSizeToMinScale();
+                    Repaint();
+                    Focus();
+                };
+            };
         }
 
         void UpdateGameViewSizeToMinScale()
