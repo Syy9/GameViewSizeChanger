@@ -116,7 +116,7 @@ namespace Syy.GameViewSizeChanger
             {
                 GameViewSizeHelper.AddCustomSize(groupType, gameViewSize);
             }
-            GameViewSizeHelper.ChangeGameViewSize(GetCurrentGroupType(), gameViewSize);
+            GameViewSizeHelper.ChangeGameViewSize(groupType, gameViewSize);
         }
 
         void UpdateGameViewSizeToMinScale()
