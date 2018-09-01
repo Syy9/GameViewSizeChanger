@@ -15,7 +15,7 @@ namespace Syy.GameViewSizeChanger
             GetWindow<GameViewSizeChanger>("GameViewSizeChanger");
         }
 
-        private readonly GameViewSizeApplyer[] presets = new GameViewSizeApplyer[]
+        private readonly GameViewSizeApplyer[] applyers = new GameViewSizeApplyer[]
         {
             //iOS
             new GameViewSizeApplyer() {Title="iPhone4", Aspect="2:3", Width=640, Height=960, },
@@ -33,26 +33,26 @@ namespace Syy.GameViewSizeChanger
 
         void OnEnable()
         {
-            foreach (var preset in presets)
+            foreach (var applyer in applyers)
             {
-                preset.OnChangeGameViewSize += OnChangeGameViewSize;
+                applyer.OnChangeGameViewSize += OnChangeGameViewSize;
             }
         }
 
         void OnDisable()
         {
-            foreach (var preset in presets)
+            foreach (var applyer in applyers)
             {
-                preset.OnChangeGameViewSize -= OnChangeGameViewSize;
+                applyer.OnChangeGameViewSize -= OnChangeGameViewSize;
             }
         }
 
         void OnGUI()
         {
-            for (int i = 0; i < presets.Length; i++)
+            for (int i = 0; i < applyers.Length; i++)
             {
-                var preset = presets[i];
-                preset.OnGUI();
+                var applyer = applyers[i];
+                applyer.OnGUI();
             }
 
             using(var check = new EditorGUI.ChangeCheckScope())
@@ -60,9 +60,9 @@ namespace Syy.GameViewSizeChanger
                 orientation = (Orientation)EditorGUILayout.EnumPopup("Orientation", orientation);
                 if(check.changed)
                 {
-                    foreach (var preset in presets)
+                    foreach (var applyer in applyers)
                     {
-                        preset.orientation = orientation;
+                        applyer.orientation = orientation;
                     }
                 }
             }
@@ -73,13 +73,13 @@ namespace Syy.GameViewSizeChanger
                 if (e.keyCode == KeyCode.UpArrow)
                 {
                     selectPresetIndex = Mathf.Max(0, selectPresetIndex - 1);
-                    presets[selectPresetIndex].Apply();
+                    applyers[selectPresetIndex].Apply();
                     e.Use();
                 }
                 else if (e.keyCode == KeyCode.DownArrow)
                 {
-                    selectPresetIndex = Mathf.Min(presets.Length - 1, selectPresetIndex + 1);
-                    presets[selectPresetIndex].Apply();
+                    selectPresetIndex = Mathf.Min(applyers.Length - 1, selectPresetIndex + 1);
+                    applyers[selectPresetIndex].Apply();
                     e.Use();
                 }
             }
