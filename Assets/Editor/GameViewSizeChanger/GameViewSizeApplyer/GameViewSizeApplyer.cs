@@ -31,7 +31,7 @@ namespace Syy.GameViewSizeChanger
             }
         }
 
-        public void Apply()
+        public virtual void Apply()
         {
             ApplyImpl();
             EditorApplication.QueuePlayerLoopUpdate();
