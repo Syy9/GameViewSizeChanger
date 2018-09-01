@@ -15,15 +15,15 @@ namespace Syy.GameViewSizeChanger
             GetWindow<GameViewSizeChanger>("GameViewSizeChanger");
         }
 
-        private static readonly SizeData[] presets = new SizeData[]
+        private static readonly GameViewSizeApplyer[] presets = new GameViewSizeApplyer[]
         {
             //iOS
-            new SizeData() {Title="iPhone4", Aspect="2:3", Width=640, Height=960, },
-            new SizeData() {Title="iPhone8", Aspect="9:16", Width=750, Height=1334, },
-            new SizeData() {Title="iPhoneX", Aspect="1:2", Width=1125, Height=2436, },
-            new SizeData() {Title="iPad", Aspect="3:4", Width=768, Height=1024, },
+            new GameViewSizeApplyer() {Title="iPhone4", Aspect="2:3", Width=640, Height=960, },
+            new GameViewSizeApplyer() {Title="iPhone8", Aspect="9:16", Width=750, Height=1334, },
+            new GameViewSizeApplyer() {Title="iPhoneX", Aspect="1:2", Width=1125, Height=2436, },
+            new GameViewSizeApplyer() {Title="iPad", Aspect="3:4", Width=768, Height=1024, },
             // Android
-            new SizeData() {Title="GalaxyS8", Aspect="18.5：9", Width=1440, Height=2960, },
+            new GameViewSizeApplyer() {Title="GalaxyS8", Aspect="18.5：9", Width=1440, Height=2960, },
             
             //new SizeData() {Title="", Aspect="", Width=1, Height=1, },
         };
@@ -73,7 +73,7 @@ namespace Syy.GameViewSizeChanger
             }
         }
 
-        void StartGameViewSizeProcess(SizeData preset)
+        void StartGameViewSizeProcess(GameViewSizeApplyer preset)
         {
             ChangeGameViewSize(preset);
             EditorApplication.delayCall += () =>
@@ -99,7 +99,7 @@ namespace Syy.GameViewSizeChanger
             EditorApplication.QueuePlayerLoopUpdate();
         }
 
-        void ChangeGameViewSize(SizeData data)
+        void ChangeGameViewSize(GameViewSizeApplyer data)
         {
             var gameViewSize = data.Convert();
             var groupType = GetCurrentGroupType();
@@ -129,7 +129,7 @@ namespace Syy.GameViewSizeChanger
             throw new NotImplementedException("Not Implemented BuildTargetType=" + EditorUserBuildSettings.activeBuildTarget.ToString());
         }
 
-        private class SizeData {
+        private class GameViewSizeApplyer {
             public string Title;
             public string Aspect;
             public int Width;
@@ -164,7 +164,7 @@ namespace Syy.GameViewSizeChanger
                     return false;
                 }
 
-                var cast = (SizeData) obj;
+                var cast = (GameViewSizeApplyer) obj;
                 return this.Title == cast.Title 
                     && this.Aspect == cast.Aspect 
                     && this.Width == cast.Width 
