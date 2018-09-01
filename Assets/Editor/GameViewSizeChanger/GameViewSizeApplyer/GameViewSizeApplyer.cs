@@ -51,8 +51,17 @@ namespace Syy.GameViewSizeChanger
         public bool IsSelect()
         {
             var sizes = UnityStats.screenRes.Split('x');
-            var w = float.Parse(sizes[0]);
-            var h = float.Parse(sizes[1]);
+            int w = 0;
+            int h = 0;
+            if(orientation == Orientation.Portrait)
+            {
+                w = int.Parse(sizes[0]);
+                h = int.Parse(sizes[1]);
+            } else {
+                w = int.Parse(sizes[1]);
+                h = int.Parse(sizes[0]);
+            }
+
             return Width == w && Height == h;
         }
         public string ToText()
