@@ -36,21 +36,9 @@ namespace Syy.GameViewSizeChanger
             for (int i = 0; i < presets.Length; i++)
             {
                 var preset = presets[i];
-                var sizes = UnityStats.screenRes.Split('x');
-                var w = float.Parse(sizes[0]);
-                var h = float.Parse(sizes[1]);
-                bool isCurrentGameViewSize = preset.Width == w && preset.Height == h;
-                var defaultColor = GUI.color;
-                if(isCurrentGameViewSize)
-                {
-                    GUI.color = isCurrentGameViewSize ? Color.gray : defaultColor;
-                    selectPresetIndex = i;
-                }
-                if (GUILayout.Button(preset.GetLabel(), "box", GUILayout.ExpandWidth(true)))
-                {
+                if(preset.OnGUI()) {
                     StartGameViewSizeProcess(preset);
                 }
-                GUI.color = defaultColor;
             }
 
             using(var check = new EditorGUI.ChangeCheckScope())

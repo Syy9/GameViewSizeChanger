@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Kyusyukeigo.Helper;
+using UnityEditor;
 using UnityEngine;
 namespace Syy.GameViewSizeChanger
 {
@@ -32,6 +33,30 @@ namespace Syy.GameViewSizeChanger
             gameViewSize.width = w;
             gameViewSize.height = h;
             return gameViewSize;
+        }
+
+        public bool OnGUI()
+        {
+            var defaultColor = GUI.color;
+            if (IsCurrentGameViewSize())
+            {
+                GUI.color = Color.gray;
+            }
+            if (GUILayout.Button(GetLabel(), "box", GUILayout.ExpandWidth(true)))
+            {
+                GUI.color = defaultColor;
+                return true;
+            }
+            GUI.color = defaultColor;
+            return false;
+        }
+
+        public bool IsCurrentGameViewSize()
+        {
+            var sizes = UnityStats.screenRes.Split('x');
+            var w = float.Parse(sizes[0]);
+            var h = float.Parse(sizes[1]);
+            return Width == w && Height == h;
         }
     }
 
