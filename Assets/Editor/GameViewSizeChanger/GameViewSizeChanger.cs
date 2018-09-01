@@ -36,6 +36,7 @@ namespace Syy.GameViewSizeChanger
             int index = 0;
             foreach (var applyer in applyers)
             {
+                applyer.orientation = orientation;
                 applyer.OnChangeGameViewSize += OnChangeGameViewSize;
                 if(applyer.IsSelect())
                 {
