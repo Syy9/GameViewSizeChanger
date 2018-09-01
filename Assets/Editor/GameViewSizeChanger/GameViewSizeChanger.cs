@@ -33,9 +33,15 @@ namespace Syy.GameViewSizeChanger
 
         void OnEnable()
         {
+            int index = 0;
             foreach (var applyer in applyers)
             {
                 applyer.OnChangeGameViewSize += OnChangeGameViewSize;
+                if(applyer.IsCurrentGameViewSize())
+                {
+                    selectIndex = index;
+                }
+                index++;
             }
         }
 
