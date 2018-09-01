@@ -24,7 +24,7 @@ namespace Syy.GameViewSizeChanger
 
         public void OnGUI()
         {
-            bool isHighlight = IsCurrentGameViewSize();
+            bool isHighlight = IsSelect();
             if (gui.OnGUI(isHighlight))
             {
                 Apply();
@@ -92,7 +92,7 @@ namespace Syy.GameViewSizeChanger
             return gameViewSize;
         }
 
-        public bool IsCurrentGameViewSize()
+        public bool IsSelect()
         {
             var sizes = UnityStats.screenRes.Split('x');
             var w = float.Parse(sizes[0]);

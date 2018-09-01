@@ -37,7 +37,7 @@ namespace Syy.GameViewSizeChanger
             foreach (var applyer in applyers)
             {
                 applyer.OnChangeGameViewSize += OnChangeGameViewSize;
-                if(applyer.IsCurrentGameViewSize())
+                if(applyer.IsSelect())
                 {
                     selectIndex = index;
                 }
@@ -106,7 +106,7 @@ namespace Syy.GameViewSizeChanger
             int index = 0;
             foreach (var applyer in applyers)
             {
-                if (applyer.IsCurrentGameViewSize())
+                if (applyer.IsSelect())
                 {
                     selectIndex = index;
                 }
