@@ -6,18 +6,18 @@ using UnityEditor;
 using UnityEngine;
 namespace Syy.GameViewSizeChanger
 {
-    public class GameViewSizeApplyer
+    public class GameViewSizeApplyer : IGameViewSizeData
     {
-        public string Title;
-        public string Aspect;
-        public int Width;
-        public int Height;
-        public Orientation orientation;
+        public string Title { get; set; }
+        public string Aspect { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public Orientation orientation { get; set; }
         public event Action OnChangeGameViewSize;
 
         GameViewSizeChangerGUI gui;
 
-        public string GetLabel()
+        public string ToText()
         {
             bool isPortrait = orientation == Orientation.Portrait;
             string arrow = isPortrait ? "↑" : "→";
@@ -35,7 +35,7 @@ namespace Syy.GameViewSizeChanger
         {
             var gameViewSize = new GameViewSizeHelper.GameViewSize();
             gameViewSize.type = GameViewSizeHelper.GameViewSizeType.FixedResolution;
-            gameViewSize.baseText = GetLabel();
+            gameViewSize.baseText = ToText();
             bool isPortrait = orientation == Orientation.Portrait;
             int w = isPortrait ? Width : Height;
             int h = isPortrait ? Height : Width;

@@ -4,10 +4,10 @@ namespace Syy.GameViewSizeChanger
 {
     public class GameViewSizeChangerGUI
     {
-        GameViewSizeApplyer applyer;
-        public GameViewSizeChangerGUI(GameViewSizeApplyer applyer)
+        IGameViewSizeData data;
+        public GameViewSizeChangerGUI(IGameViewSizeData data)
         {
-            this.applyer = applyer;
+            this.data = data;
         }
         public bool OnGUI(bool isHighlight)
         {
@@ -16,7 +16,7 @@ namespace Syy.GameViewSizeChanger
             {
                 GUI.color = Color.gray;
             }
-            if (GUILayout.Button(applyer.GetLabel(), "box", GUILayout.ExpandWidth(true)))
+            if (GUILayout.Button(data.ToText(), "box", GUILayout.ExpandWidth(true)))
             {
                 GUI.color = defaultColor;
                 return true;
