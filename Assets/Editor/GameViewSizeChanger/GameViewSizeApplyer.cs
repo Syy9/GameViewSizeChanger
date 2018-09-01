@@ -34,6 +34,7 @@ namespace Syy.GameViewSizeChanger
         public void Apply()
         {
             ApplyImpl();
+            EditorApplication.QueuePlayerLoopUpdate();
             EditorApplication.delayCall += () =>
             {
                 //Wait gameView size change completed
@@ -68,7 +69,6 @@ namespace Syy.GameViewSizeChanger
             var minScaleProperty = type.GetProperty("minScale", flag);
             float minScale = (float)minScaleProperty.GetValue(gameView, null);
             type.GetMethod("SnapZoom", flag, null, new System.Type[] { typeof(float) }, null).Invoke(gameView, new object[] { minScale });
-            EditorApplication.QueuePlayerLoopUpdate();
         }
         public string ToText()
         {
