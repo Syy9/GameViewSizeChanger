@@ -15,6 +15,8 @@ namespace Syy.GameViewSizeChanger
         public Orientation orientation;
         public event Action OnChangeGameViewSize;
 
+        GameViewSizeChangerGUI gui;
+
         public string GetLabel()
         {
             bool isPortrait = orientation == Orientation.Portrait;
@@ -22,6 +24,11 @@ namespace Syy.GameViewSizeChanger
             int w = isPortrait ? Width : Height;
             int h = isPortrait ? Height : Width;
             return string.Format("【{0}】 {1} 【{2}={3}x{4}】", arrow, Title, Aspect, w, h);
+        }
+
+        public GameViewSizeApplyer()
+        {
+            gui = new GameViewSizeChangerGUI(this);
         }
 
         public GameViewSizeHelper.GameViewSize Convert()
@@ -39,16 +46,11 @@ namespace Syy.GameViewSizeChanger
 
         public void OnGUI()
         {
-            var defaultColor = GUI.color;
-            if (IsCurrentGameViewSize())
-            {
-                GUI.color = Color.gray;
-            }
-            if (GUILayout.Button(GetLabel(), "box", GUILayout.ExpandWidth(true)))
+            bool isHighlight = IsCurrentGameViewSize();
+            if(gui.OnGUI(isHighlight))
             {
                 Apply();
             }
-            GUI.color = defaultColor;
         }
 
         public bool IsCurrentGameViewSize()
