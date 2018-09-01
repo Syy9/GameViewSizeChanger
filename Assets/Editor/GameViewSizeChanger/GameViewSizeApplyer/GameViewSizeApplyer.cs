@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 namespace Syy.GameViewSizeChanger
 {
-    public class GameViewSizeApplyer : IGameViewSizeData
+    public class GameViewSizeApplyer : IGameViewSizeData , IGameViewSizeApplyer
     {
         public string Title { get; set; }
         public string Aspect { get; set; }
