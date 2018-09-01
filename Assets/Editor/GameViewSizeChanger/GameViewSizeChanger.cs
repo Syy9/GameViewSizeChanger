@@ -103,6 +103,15 @@ namespace Syy.GameViewSizeChanger
         {
             Repaint();
             Focus();
+            int index = 0;
+            foreach (var applyer in applyers)
+            {
+                if (applyer.IsCurrentGameViewSize())
+                {
+                    selectIndex = index;
+                }
+                index++;
+            }
         }
     }
 }
