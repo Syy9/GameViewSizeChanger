@@ -33,25 +33,6 @@ namespace Syy.GameViewSizeChanger
             gameViewSize.height = h;
             return gameViewSize;
         }
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null || this.GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            var cast = (GameViewSizeApplyer)obj;
-            return this.Title == cast.Title
-                && this.Aspect == cast.Aspect
-                && this.Width == cast.Width
-                && this.Height == cast.Height;
-        }
-
-        public override int GetHashCode()
-        {
-            return int.Parse(this.Width.ToString() + "000" + this.Height.ToString());
-        }
     }
 
     public enum Orientation
