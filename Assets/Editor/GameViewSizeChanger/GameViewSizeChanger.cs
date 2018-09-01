@@ -29,7 +29,7 @@ namespace Syy.GameViewSizeChanger
         };
 
         Orientation orientation;
-        int selectPresetIndex = 0;
+        int selectIndex = 0;
 
         void OnEnable()
         {
@@ -72,14 +72,14 @@ namespace Syy.GameViewSizeChanger
             {
                 if (e.keyCode == KeyCode.UpArrow)
                 {
-                    selectPresetIndex = Mathf.Max(0, selectPresetIndex - 1);
-                    applyers[selectPresetIndex].Apply();
+                    selectIndex = Mathf.Max(0, selectIndex - 1);
+                    applyers[selectIndex].Apply();
                     e.Use();
                 }
                 else if (e.keyCode == KeyCode.DownArrow)
                 {
-                    selectPresetIndex = Mathf.Min(applyers.Length - 1, selectPresetIndex + 1);
-                    applyers[selectPresetIndex].Apply();
+                    selectIndex = Mathf.Min(applyers.Length - 1, selectIndex + 1);
+                    applyers[selectIndex].Apply();
                     e.Use();
                 }
             }
