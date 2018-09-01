@@ -64,6 +64,10 @@ namespace Syy.GameViewSizeChanger
 
             return Width == w && Height == h;
         }
+        public virtual void NoticeChangedOtherSize()
+        {
+            
+        }
         public string ToText()
         {
             bool isPortrait = orientation == Orientation.Portrait;

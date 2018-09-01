@@ -109,6 +109,8 @@ namespace Syy.GameViewSizeChanger
                 if (applyer.IsSelect())
                 {
                     selectIndex = index;
+                } else {
+                    applyer.NoticeChangedOtherSize();
                 }
                 index++;
             }

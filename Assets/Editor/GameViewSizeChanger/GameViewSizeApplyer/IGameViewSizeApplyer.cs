@@ -4,5 +4,6 @@
     {
         void Apply();
         bool IsSelect();
+        void NoticeChangedOtherSize();
     }
 }
