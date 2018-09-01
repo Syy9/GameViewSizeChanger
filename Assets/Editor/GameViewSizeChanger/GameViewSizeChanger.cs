@@ -31,14 +31,28 @@ namespace Syy.GameViewSizeChanger
         Orientation orientation;
         int selectPresetIndex = 0;
 
+        void OnEnable()
+        {
+            foreach (var preset in presets)
+            {
+                preset.OnChangeGameViewSize += OnChangeGameViewSize;
+            }
+        }
+
+        void OnDisable()
+        {
+            foreach (var preset in presets)
+            {
+                preset.OnChangeGameViewSize -= OnChangeGameViewSize;
+            }
+        }
+
         void OnGUI()
         {
             for (int i = 0; i < presets.Length; i++)
             {
                 var preset = presets[i];
-                if(preset.OnGUI()) {
-                    StartGameViewSizeProcess(preset);
-                }
+                preset.OnGUI();
             }
 
             using(var check = new EditorGUI.ChangeCheckScope())
@@ -59,72 +73,22 @@ namespace Syy.GameViewSizeChanger
                 if (e.keyCode == KeyCode.UpArrow)
                 {
                     selectPresetIndex = Mathf.Max(0, selectPresetIndex - 1);
-                    StartGameViewSizeProcess(presets[selectPresetIndex]);
+                    presets[selectPresetIndex].Apply();
                     e.Use();
                 }
                 else if (e.keyCode == KeyCode.DownArrow)
                 {
                     selectPresetIndex = Mathf.Min(presets.Length - 1, selectPresetIndex + 1);
-                    StartGameViewSizeProcess(presets[selectPresetIndex]);
+                    presets[selectPresetIndex].Apply();
                     e.Use();
                 }
             }
         }
 
-        void StartGameViewSizeProcess(GameViewSizeApplyer preset)
+        void OnChangeGameViewSize()
         {
-            ChangeGameViewSize(preset);
-            EditorApplication.delayCall += () =>
-            {
-                //Wait gameView size change completed
-                EditorApplication.delayCall += () =>
-                {
-                    UpdateGameViewSizeToMinScale();
-                    Focus();
-                };
-            };
-        }
-
-        void UpdateGameViewSizeToMinScale()
-        {
-            var flag = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
-            var assembly = typeof(Editor).Assembly;
-            var type = assembly.GetType("UnityEditor.GameView");
-            EditorWindow gameView = EditorWindow.GetWindow(type);
-            var minScaleProperty = type.GetProperty("minScale", flag);
-            float minScale = (float) minScaleProperty.GetValue(gameView, null);
-            type.GetMethod("SnapZoom", flag, null, new System.Type[] { typeof(float) }, null).Invoke(gameView, new object[] { minScale });
-            EditorApplication.QueuePlayerLoopUpdate();
-        }
-
-        void ChangeGameViewSize(GameViewSizeApplyer data)
-        {
-            var gameViewSize = data.Convert();
-            var groupType = GetCurrentGroupType();
-            if(!GameViewSizeHelper.Contains(groupType, gameViewSize))
-            {
-                GameViewSizeHelper.AddCustomSize(groupType, gameViewSize);
-            }
-            GameViewSizeHelper.ChangeGameViewSize(GetCurrentGroupType(), gameViewSize);
-        }
-
-        GameViewSizeGroupType GetCurrentGroupType()
-        {
-            switch(EditorUserBuildSettings.activeBuildTarget)
-            {
-                case BuildTarget.Android:
-                    return GameViewSizeGroupType.Android;
-                case BuildTarget.iOS:
-                    return GameViewSizeGroupType.iOS;
-                case BuildTarget.StandaloneLinux:
-                case BuildTarget.StandaloneLinux64:
-                case BuildTarget.StandaloneLinuxUniversal:
-                case BuildTarget.StandaloneOSX:
-                case BuildTarget.StandaloneWindows:
-                case BuildTarget.StandaloneWindows64:
-                    return GameViewSizeGroupType.Standalone;
-            }
-            throw new NotImplementedException("Not Implemented BuildTargetType=" + EditorUserBuildSettings.activeBuildTarget.ToString());
+            Repaint();
+            Focus();
         }
     }
 }
