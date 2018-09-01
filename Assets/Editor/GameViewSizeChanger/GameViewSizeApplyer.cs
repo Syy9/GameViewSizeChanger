@@ -15,11 +15,11 @@ namespace Syy.GameViewSizeChanger
         public Orientation orientation { get; set; }
         public event Action OnChangeGameViewSize;
 
-        GameViewSizeChangerGUI gui;
+        GameViewSizeApplyerGUI gui;
 
         public GameViewSizeApplyer()
         {
-            gui = new GameViewSizeChangerGUI(this);
+            gui = new GameViewSizeApplyerGUI(this);
         }
 
         public void OnGUI()

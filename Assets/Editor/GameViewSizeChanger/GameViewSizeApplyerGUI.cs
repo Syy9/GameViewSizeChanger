@@ -2,10 +2,10 @@
 
 namespace Syy.GameViewSizeChanger
 {
-    public class GameViewSizeChangerGUI
+    public class GameViewSizeApplyerGUI
     {
         IGameViewSizeData data;
-        public GameViewSizeChangerGUI(IGameViewSizeData data)
+        public GameViewSizeApplyerGUI(IGameViewSizeData data)
         {
             this.data = data;
         }
