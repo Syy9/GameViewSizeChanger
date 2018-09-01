@@ -17,48 +17,18 @@ namespace Syy.GameViewSizeChanger
 
         GameViewSizeChangerGUI gui;
 
-        public string ToText()
-        {
-            bool isPortrait = orientation == Orientation.Portrait;
-            string arrow = isPortrait ? "↑" : "→";
-            int w = isPortrait ? Width : Height;
-            int h = isPortrait ? Height : Width;
-            return string.Format("【{0}】 {1} 【{2}={3}x{4}】", arrow, Title, Aspect, w, h);
-        }
-
         public GameViewSizeApplyer()
         {
             gui = new GameViewSizeChangerGUI(this);
         }
 
-        public GameViewSizeHelper.GameViewSize Convert()
-        {
-            var gameViewSize = new GameViewSizeHelper.GameViewSize();
-            gameViewSize.type = GameViewSizeHelper.GameViewSizeType.FixedResolution;
-            gameViewSize.baseText = ToText();
-            bool isPortrait = orientation == Orientation.Portrait;
-            int w = isPortrait ? Width : Height;
-            int h = isPortrait ? Height : Width;
-            gameViewSize.width = w;
-            gameViewSize.height = h;
-            return gameViewSize;
-        }
-
         public void OnGUI()
         {
             bool isHighlight = IsCurrentGameViewSize();
-            if(gui.OnGUI(isHighlight))
+            if (gui.OnGUI(isHighlight))
             {
                 Apply();
             }
-        }
-
-        public bool IsCurrentGameViewSize()
-        {
-            var sizes = UnityStats.screenRes.Split('x');
-            var w = float.Parse(sizes[0]);
-            var h = float.Parse(sizes[1]);
-            return Width == w && Height == h;
         }
 
         public void Apply()
@@ -78,6 +48,17 @@ namespace Syy.GameViewSizeChanger
             };
         }
 
+        void ApplyImpl()
+        {
+            var gameViewSize = Convert();
+            var groupType = GetCurrentGroupType();
+            if (!GameViewSizeHelper.Contains(groupType, gameViewSize))
+            {
+                GameViewSizeHelper.AddCustomSize(groupType, gameViewSize);
+            }
+            GameViewSizeHelper.ChangeGameViewSize(GetCurrentGroupType(), gameViewSize);
+        }
+
         void UpdateGameViewSizeToMinScale()
         {
             var flag = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
@@ -89,16 +70,34 @@ namespace Syy.GameViewSizeChanger
             type.GetMethod("SnapZoom", flag, null, new System.Type[] { typeof(float) }, null).Invoke(gameView, new object[] { minScale });
             EditorApplication.QueuePlayerLoopUpdate();
         }
-
-        void ApplyImpl()
+        public string ToText()
         {
-            var gameViewSize = Convert();
-            var groupType = GetCurrentGroupType();
-            if (!GameViewSizeHelper.Contains(groupType, gameViewSize))
-            {
-                GameViewSizeHelper.AddCustomSize(groupType, gameViewSize);
-            }
-            GameViewSizeHelper.ChangeGameViewSize(GetCurrentGroupType(), gameViewSize);
+            bool isPortrait = orientation == Orientation.Portrait;
+            string arrow = isPortrait ? "↑" : "→";
+            int w = isPortrait ? Width : Height;
+            int h = isPortrait ? Height : Width;
+            return string.Format("【{0}】 {1} 【{2}={3}x{4}】", arrow, Title, Aspect, w, h);
+        }
+
+        public GameViewSizeHelper.GameViewSize Convert()
+        {
+            var gameViewSize = new GameViewSizeHelper.GameViewSize();
+            gameViewSize.type = GameViewSizeHelper.GameViewSizeType.FixedResolution;
+            gameViewSize.baseText = ToText();
+            bool isPortrait = orientation == Orientation.Portrait;
+            int w = isPortrait ? Width : Height;
+            int h = isPortrait ? Height : Width;
+            gameViewSize.width = w;
+            gameViewSize.height = h;
+            return gameViewSize;
+        }
+
+        public bool IsCurrentGameViewSize()
+        {
+            var sizes = UnityStats.screenRes.Split('x');
+            var w = float.Parse(sizes[0]);
+            var h = float.Parse(sizes[1]);
+            return Width == w && Height == h;
         }
 
         GameViewSizeGroupType GetCurrentGroupType()
