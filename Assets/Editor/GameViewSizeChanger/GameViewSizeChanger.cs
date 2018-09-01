@@ -15,7 +15,7 @@ namespace Syy.GameViewSizeChanger
             GetWindow<GameViewSizeChanger>("GameViewSizeChanger");
         }
 
-        private static readonly GameViewSizeApplyer[] presets = new GameViewSizeApplyer[]
+        private readonly GameViewSizeApplyer[] presets = new GameViewSizeApplyer[]
         {
             //iOS
             new GameViewSizeApplyer() {Title="iPhone4", Aspect="2:3", Width=640, Height=960, },
@@ -28,8 +28,8 @@ namespace Syy.GameViewSizeChanger
             //new SizeData() {Title="", Aspect="", Width=1, Height=1, },
         };
 
-        static Orientation orientation;
-        static int selectPresetIndex = 0;
+        Orientation orientation;
+        int selectPresetIndex = 0;
 
         void OnGUI()
         {
