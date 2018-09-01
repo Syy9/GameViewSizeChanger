@@ -56,9 +56,8 @@ namespace Syy.GameViewSizeChanger
 
         void OnGUI()
         {
-            for (int i = 0; i < applyers.Length; i++)
+            foreach (var applyer in applyers)
             {
-                var applyer = applyers[i];
                 applyer.OnGUI();
             }
 
