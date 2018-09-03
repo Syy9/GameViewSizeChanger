@@ -6,8 +6,9 @@ Easily change GameViewSize in Unity
 ![demo](demo1.gif)
 
 ## Feature
-* Register the screen size of a representative smartphone terminal in GameViewSize.
 * Change GameViewSize
+* Register the screen size of a representative smartphone terminal in GameViewSize.
+* Draw iPhoneX frame
 
 ## Usage
 1. import GameViewSizeChanger.unitypackage
