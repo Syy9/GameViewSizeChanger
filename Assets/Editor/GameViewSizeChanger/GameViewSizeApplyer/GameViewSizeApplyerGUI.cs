@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEditor;
 
 namespace Syy.GameViewSizeChanger
 {
@@ -16,7 +17,10 @@ namespace Syy.GameViewSizeChanger
             {
                 GUI.color = Color.gray;
             }
-            if (GUILayout.Button(data.ToText(), "box", GUILayout.ExpandWidth(true)))
+
+            var style = new GUIStyle(GUI.skin.box);
+            style.normal.textColor = EditorStyles.toolbar.normal.textColor;
+            if (GUILayout.Button(data.ToText(), style, GUILayout.ExpandWidth(true)))
             {
                 GUI.color = defaultColor;
                 return true;
