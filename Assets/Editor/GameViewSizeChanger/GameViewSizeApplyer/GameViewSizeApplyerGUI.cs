@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System;
 
 namespace Syy.Tools
 {
@@ -21,19 +22,31 @@ namespace Syy.Tools
                 _style.normal.textColor = EditorStyles.toolbar.normal.textColor;
             }
 
-            var defaultColor = GUI.color;
-            if (isHighlight)
+            bool isClick = false;
+            using (new ColorScope(isHighlight ? Color.gray : GUI.color))
             {
-                GUI.color = Color.gray;
+                if (GUILayout.Button(_data.ToText(), _style, GUILayout.ExpandWidth(true)))
+                {
+                    isClick = true;
+                }
             }
 
-            if (GUILayout.Button(_data.ToText(), _style, GUILayout.ExpandWidth(true)))
+            return isClick;
+        }
+
+        class ColorScope : IDisposable
+        {
+            private Color _prevColor;
+            public ColorScope(Color color)
             {
-                GUI.color = defaultColor;
-                return true;
+                _prevColor = GUI.color;
+                GUI.color = color;
             }
-            GUI.color = defaultColor;
-            return false;
+
+            public void Dispose()
+            {
+                GUI.color = _prevColor;
+            }
         }
     }
 }
