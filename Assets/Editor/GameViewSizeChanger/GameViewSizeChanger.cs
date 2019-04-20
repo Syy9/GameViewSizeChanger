@@ -5,7 +5,7 @@ using Kyusyukeigo.Helper;
 using UnityEditor;
 using UnityEngine;
 
-namespace Syy.GameViewSizeChanger
+namespace Syy.Tools
 {
     public class GameViewSizeChanger : EditorWindow
     {
@@ -15,32 +15,32 @@ namespace Syy.GameViewSizeChanger
             GetWindow<GameViewSizeChanger>("GameViewSizeChanger");
         }
 
-        private readonly GameViewSizeApplyer[] applyers = new GameViewSizeApplyer[]
+        static readonly GameViewSizeApplyer[] Applyers = new GameViewSizeApplyer[]
         {
             //iOS
-            new GameViewSizeApplyer() {Title="iPhone4", Aspect="2:3", Width=640, Height=960, },
-            new GameViewSizeApplyer() {Title="iPhone8", Aspect="9:16", Width=750, Height=1334, },
-            new iPhoneXSizeApplyer() {Title="iPhoneX", Aspect="1:2", Width=1125, Height=2436, },
-            new GameViewSizeApplyer() {Title="iPad", Aspect="3:4", Width=768, Height=1024, },
+            new GameViewSizeApplyer() { Title="iPhone4", Aspect="2:3", Width=640, Height=960, },
+            new GameViewSizeApplyer() { Title="iPhone8", Aspect="9:16", Width=750, Height=1334, },
+            new iPhoneXSizeApplyer () { Title="iPhoneX", Aspect="1:2", Width=1125, Height=2436, },
+            new GameViewSizeApplyer() { Title="iPad"   , Aspect="3:4", Width=768, Height=1024, },
             // Android
-            new GameViewSizeApplyer() {Title="GalaxyS8", Aspect="18.5：9", Width=1440, Height=2960, },
-            
+            new GameViewSizeApplyer() { Title="GalaxyS8", Aspect="18.5：9", Width=1440, Height=2960, },
+
             //new SizeData() {Title="", Aspect="", Width=1, Height=1, },
         };
 
-        Orientation orientation;
-        int selectIndex = 0;
+        Orientation _orientation = Orientation.Portrait;
+        int _selectIndex = 0;
 
         void OnEnable()
         {
             int index = 0;
-            foreach (var applyer in applyers)
+            foreach (var applyer in Applyers)
             {
-                applyer.orientation = orientation;
+                applyer.orientation = _orientation;
                 applyer.OnChangeGameViewSize += OnChangeGameViewSize;
-                if(applyer.IsSelect())
+                if (applyer.IsSelect())
                 {
-                    selectIndex = index;
+                    _selectIndex = index;
                 }
                 index++;
             }
@@ -48,7 +48,7 @@ namespace Syy.GameViewSizeChanger
 
         void OnDisable()
         {
-            foreach (var applyer in applyers)
+            foreach (var applyer in Applyers)
             {
                 applyer.OnChangeGameViewSize -= OnChangeGameViewSize;
             }
@@ -56,19 +56,19 @@ namespace Syy.GameViewSizeChanger
 
         void OnGUI()
         {
-            foreach (var applyer in applyers)
+            foreach (var applyer in Applyers)
             {
                 applyer.OnGUI();
             }
 
-            using(var check = new EditorGUI.ChangeCheckScope())
+            using (var check = new EditorGUI.ChangeCheckScope())
             {
-                orientation = (Orientation)EditorGUILayout.EnumPopup("Orientation", orientation);
-                if(check.changed)
+                _orientation = (Orientation)EditorGUILayout.EnumPopup("Orientation", _orientation);
+                if (check.changed)
                 {
-                    foreach (var applyer in applyers)
+                    foreach (var applyer in Applyers)
                     {
-                        applyer.orientation = orientation;
+                        applyer.orientation = _orientation;
                     }
                 }
             }
@@ -78,22 +78,22 @@ namespace Syy.GameViewSizeChanger
             {
                 if (e.keyCode == KeyCode.UpArrow)
                 {
-                    selectIndex--;
-                    if(selectIndex < 0)
+                    _selectIndex--;
+                    if(_selectIndex < 0)
                     {
-                        selectIndex = applyers.Length -1;
+                        _selectIndex = Applyers.Length -1;
                     }
-                    applyers[selectIndex].Apply();
+                    Applyers[_selectIndex].Apply();
                     e.Use();
                 }
                 else if (e.keyCode == KeyCode.DownArrow)
                 {
-                    selectIndex++;
-                    if (selectIndex > (applyers.Length - 1))
+                    _selectIndex++;
+                    if (_selectIndex > (Applyers.Length - 1))
                     {
-                        selectIndex = 0;
+                        _selectIndex = 0;
                     }
-                    applyers[selectIndex].Apply();
+                    Applyers[_selectIndex].Apply();
                     e.Use();
                 }
             }
@@ -104,12 +104,14 @@ namespace Syy.GameViewSizeChanger
             Repaint();
             Focus();
             int index = 0;
-            foreach (var applyer in applyers)
+            foreach (var applyer in Applyers)
             {
                 if (applyer.IsSelect())
                 {
-                    selectIndex = index;
-                } else {
+                    _selectIndex = index;
+                }
+                else
+                {
                     applyer.NoticeChangedOtherSize();
                 }
                 index++;

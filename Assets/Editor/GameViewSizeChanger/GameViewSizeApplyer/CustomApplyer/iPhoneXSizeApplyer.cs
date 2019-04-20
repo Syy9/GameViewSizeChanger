@@ -3,19 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-namespace Syy.GameViewSizeChanger
+
+namespace Syy.Tools
 {
     public class iPhoneXSizeApplyer : GameViewSizeApplyer
     {
         GameViewOverlay overlay;
         Texture _portraitTexture;
-        Texture PortraitTexture {
-            get {
-                if(_portraitTexture == null)
-                {
-                    _portraitTexture = (Texture)EditorGUIUtility.Load("GameViewSizeChanger/iPhoneX_Portrait.png");
-                }
-                return _portraitTexture;
+        Texture PortraitTexture
+        {
+            get
+            {
+                return _portraitTexture = _portraitTexture ?? (Texture)EditorGUIUtility.Load("GameViewSizeChanger/iPhoneX_Portrait.png");
             }
         }
 
@@ -24,13 +23,10 @@ namespace Syy.GameViewSizeChanger
         {
             get
             {
-                if (_landscapeTexture == null)
-                {
-                    _landscapeTexture = (Texture)EditorGUIUtility.Load("GameViewSizeChanger/iPhoneX_Landscape.png");
-                }
-                return _landscapeTexture;
+                return _landscapeTexture = _landscapeTexture ?? (Texture)EditorGUIUtility.Load("GameViewSizeChanger/iPhoneX_Landscape.png");
             }
         }
+
         public override void Apply()
         {
             base.Apply();
@@ -50,13 +46,7 @@ namespace Syy.GameViewSizeChanger
         void DrawOvalay()
         {
             var rect = new Rect(0, 0, Screen.width, Screen.height);
-            if(orientation == Orientation.Portrait)
-            {
-                GUI.DrawTexture(rect, PortraitTexture);
-            } else {
-                GUI.DrawTexture(rect, LandscapeTexture);
-            }
-            
+            GUI.DrawTexture(rect, orientation == Orientation.Portrait ? PortraitTexture : LandscapeTexture);
         }
 
         void Clear()
@@ -67,7 +57,6 @@ namespace Syy.GameViewSizeChanger
                 GameObject.DestroyImmediate(overlay.gameObject);
             }
         }
-
 
         [ExecuteInEditMode()]
         [AddComponentMenu("")]
@@ -83,7 +72,5 @@ namespace Syy.GameViewSizeChanger
                 }
             }
         }
-
     }
-
 }

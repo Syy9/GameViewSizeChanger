@@ -1,4 +1,4 @@
-﻿namespace Syy.GameViewSizeChanger
+﻿namespace Syy.Tools
 {
     public interface IGameViewSizeApplyer
     {

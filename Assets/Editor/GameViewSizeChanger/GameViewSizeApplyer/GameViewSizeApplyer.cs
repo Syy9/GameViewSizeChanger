@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using Kyusyukeigo.Helper;
 using UnityEditor;
 using UnityEngine;
-namespace Syy.GameViewSizeChanger
+
+namespace Syy.Tools
 {
-    public class GameViewSizeApplyer : IGameViewSizeData , IGameViewSizeApplyer
+    public class GameViewSizeApplyer : IGameViewSizeData, IGameViewSizeApplyer
     {
         public string Title { get; set; }
         public string Aspect { get; set; }
@@ -15,17 +16,17 @@ namespace Syy.GameViewSizeChanger
         public Orientation orientation { get; set; }
         public event Action OnChangeGameViewSize;
 
-        GameViewSizeApplyerGUI gui;
+        GameViewSizeApplyerGUI _gui;
 
         public GameViewSizeApplyer()
         {
-            gui = new GameViewSizeApplyerGUI(this);
+            _gui = new GameViewSizeApplyerGUI(this);
         }
 
         public void OnGUI()
         {
             bool isHighlight = IsSelect();
-            if (gui.OnGUI(isHighlight))
+            if (_gui.OnGUI(isHighlight))
             {
                 Apply();
             }
@@ -48,6 +49,7 @@ namespace Syy.GameViewSizeChanger
                 };
             };
         }
+
         public bool IsSelect()
         {
             var sizes = UnityStats.screenRes.Split('x');
@@ -57,17 +59,20 @@ namespace Syy.GameViewSizeChanger
             {
                 w = int.Parse(sizes[0]);
                 h = int.Parse(sizes[1]);
-            } else {
+            }
+            else
+            {
                 w = int.Parse(sizes[1]);
                 h = int.Parse(sizes[0]);
             }
 
             return Width == w && Height == h;
         }
+
         public virtual void NoticeChangedOtherSize()
         {
-            
         }
+
         public string ToText()
         {
             bool isPortrait = orientation == Orientation.Portrait;
@@ -94,10 +99,8 @@ namespace Syy.GameViewSizeChanger
         {
             switch (EditorUserBuildSettings.activeBuildTarget)
             {
-                case BuildTarget.Android:
-                    return GameViewSizeGroupType.Android;
-                case BuildTarget.iOS:
-                    return GameViewSizeGroupType.iOS;
+                case BuildTarget.Android: return GameViewSizeGroupType.Android;
+                case BuildTarget.iOS: return GameViewSizeGroupType.iOS;
                 case BuildTarget.StandaloneLinux:
                 case BuildTarget.StandaloneLinux64:
                 case BuildTarget.StandaloneLinuxUniversal:
@@ -108,6 +111,7 @@ namespace Syy.GameViewSizeChanger
             }
             throw new NotImplementedException("Not Implemented BuildTargetType=" + EditorUserBuildSettings.activeBuildTarget.ToString());
         }
+
         void ApplyImpl()
         {
             var gameViewSize = Convert();
@@ -124,7 +128,7 @@ namespace Syy.GameViewSizeChanger
             var flag = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
             var assembly = typeof(Editor).Assembly;
             var type = assembly.GetType("UnityEditor.GameView");
-            EditorWindow gameView = EditorWindow.GetWindow(type);
+            var gameView = EditorWindow.GetWindow(type);
             var minScaleProperty = type.GetProperty("minScale", flag);
             float minScale = (float)minScaleProperty.GetValue(gameView, null);
             type.GetMethod("SnapZoom", flag, null, new System.Type[] { typeof(float) }, null).Invoke(gameView, new object[] { minScale });
@@ -137,4 +141,3 @@ namespace Syy.GameViewSizeChanger
         Landscape, //→
     }
 }
-

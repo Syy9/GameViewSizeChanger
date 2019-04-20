@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace Syy.GameViewSizeChanger
+namespace Syy.Tools
 {
     public class GameViewSizeApplyerGUI
     {
-        IGameViewSizeData data;
+        IGameViewSizeData _data;
         public GameViewSizeApplyerGUI(IGameViewSizeData data)
         {
-            this.data = data;
+            _data = data;
         }
+
         public bool OnGUI(bool isHighlight)
         {
             var defaultColor = GUI.color;
@@ -20,7 +21,7 @@ namespace Syy.GameViewSizeChanger
 
             var style = new GUIStyle(GUI.skin.box);
             style.normal.textColor = EditorStyles.toolbar.normal.textColor;
-            if (GUILayout.Button(data.ToText(), style, GUILayout.ExpandWidth(true)))
+            if (GUILayout.Button(_data.ToText(), style, GUILayout.ExpandWidth(true)))
             {
                 GUI.color = defaultColor;
                 return true;
