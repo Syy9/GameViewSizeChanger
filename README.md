@@ -5,7 +5,6 @@
 Easily change GameViewSize in Unity
 
 ![demo](demo1.gif)
-![demo](demo2.png)
 
 ## Feature
 * Change GameViewSize
