@@ -1,5 +1,6 @@
-# GameViewSize Changer
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
+# GameViewSize Changer
 
 Easily change GameViewSize in Unity
 
@@ -24,7 +25,7 @@ Please rewrite "GameViewSizeChanger.cs" or Make a issue [GameViewSizeChanger iss
 
 ## Licence
 
-[MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
+[MIT](LICENSE)
 
 ## Author
 
