@@ -101,9 +101,7 @@ namespace Syy.Tools
             {
                 case BuildTarget.Android: return GameViewSizeGroupType.Android;
                 case BuildTarget.iOS: return GameViewSizeGroupType.iOS;
-                case BuildTarget.StandaloneLinux:
                 case BuildTarget.StandaloneLinux64:
-                case BuildTarget.StandaloneLinuxUniversal:
                 case BuildTarget.StandaloneOSX:
                 case BuildTarget.StandaloneWindows:
                 case BuildTarget.StandaloneWindows64:
