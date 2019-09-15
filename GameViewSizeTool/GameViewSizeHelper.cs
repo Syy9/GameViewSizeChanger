@@ -105,9 +105,7 @@ namespace Kyusyukeigo.Helper
         public static void ChangeGameViewSize(GameViewSizeGroupType groupType, GameViewSize gameViewSize)
         {
             _gameViewSize = gameViewSize;
-            EditorWindow gameView = EditorWindow.GetWindow(Types.gameView);
-            PropertyInfo currentSizeGroupType = Types.gameView.GetProperty("currentSizeGroupType", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static);
-            GameViewSizeGroupType currentType = (GameViewSizeGroupType)currentSizeGroupType.GetValue(gameView, null);
+            GameViewSizeGroupType currentType = GetCurrentGameViewSizeGroupType();
             if (groupType != currentType)
             {
                 Debug.LogError(string.Format("GameViewSizeGroupType is {0}. but Current GameViewSizeGroupType is {1}.", groupType, currentType));
@@ -129,8 +127,16 @@ namespace Kyusyukeigo.Helper
             if (index != -1)
             {
                 PropertyInfo selectedSizeIndex = Types.gameView.GetProperty("selectedSizeIndex", BindingFlags.Instance | BindingFlags.NonPublic);
+                EditorWindow gameView = EditorWindow.GetWindow(Types.gameView);
                 selectedSizeIndex.SetValue(gameView, index, null);
             }
+        }
+
+        public static GameViewSizeGroupType GetCurrentGameViewSizeGroupType()
+        {
+            EditorWindow gameView = EditorWindow.GetWindow(Types.gameView);
+            PropertyInfo currentSizeGroupType = Types.gameView.GetProperty("currentSizeGroupType", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static);
+            return (GameViewSizeGroupType)currentSizeGroupType.GetValue(gameView, null);
         }
 
         #endregion public Method

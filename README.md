@@ -12,12 +12,9 @@ Easily change GameViewSize in Unity
 * Draw iPhoneX frame
 
 ## Usage
-1. import GameViewSizeChanger.unitypackage
+1. Add GameViewSizeTool Folder to unity project editor folder
 2. MenuItem "Window/GameViewSizeChanger"
 3. Select Button
-
-## Update Preset
-Please rewrite "GameViewSizeChanger.cs" or Make a issue [GameViewSizeChanger issue](https://github.com/Syy12345-Unity/GameViewSizeChanger/issues)
 
 ## Use Library
 * [unity-GameViewSizeHelper](https://github.com/anchan828/unity-GameViewSizeHelper)
