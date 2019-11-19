@@ -1,6 +1,3 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using Kyusyukeigo.Helper;
 using UnityEditor;
 using UnityEngine;
@@ -56,7 +53,7 @@ namespace Syy.Tools.GameViewSizeTool
             }
 
             GameViewSizeHelper.ChangeGameViewSize(groupType, gameViewSize);
-            EditorPrefs.SetString(GameViewSizeChanger.Key_GameViewSizeChanger_LastLabel, Label);
+            Save.Set<string>(GameViewSizeChanger.Key_GameViewSizeChanger_LastLabel, Label);
 
             // HACK: 2フレーム待たないとSnapZoomが動作しないケースがある
             EditorApplication.delayCall += () =>
@@ -66,10 +63,11 @@ namespace Syy.Tools.GameViewSizeTool
                     var flag = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
                     var assembly = typeof(Editor).Assembly;
                     var type = assembly.GetType("UnityEditor.GameView");
-                    var gameView = EditorWindow.GetWindow(type);
+                    var gameView = EditorWindow.GetWindow(type, false, "Game", false);
                     var minScaleProperty = type.GetProperty("minScale", flag);
                     float minScale = (float)minScaleProperty.GetValue(gameView, null);
                     type.GetMethod("SnapZoom", flag, null, new System.Type[] { typeof(float) }, null).Invoke(gameView, new object[] { minScale });
+                    gameView.Repaint();
                     Window.Focus();
                 };
             };
