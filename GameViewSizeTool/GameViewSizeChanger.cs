@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -14,13 +13,31 @@ namespace Syy.Tools.GameViewSizeTool
         [MenuItem("Window/GameViewSizeChanger")]
         public static void Open()
         {
-            GetWindow<GameViewSizeChanger>("GameViewSizeChanger");
+            GameViewSizeChanger window = GetWindow<GameViewSizeChanger>("GameViewSizeChanger");
+            window.Init(useResize: true);
         }
 
         ResizeTool[] _resizeTools;
         ResizeTool _activeTool;
 
+        [SerializeField]
+        Orientation _orientation;
+        public Orientation Orientation => _orientation;
+
         void OnEnable()
+        {
+            Init(useResize: false);
+        }
+
+        void OnDisable()
+        {
+            foreach (var tool in _resizeTools)
+            {
+                tool.Dispose();
+            }
+        }
+
+        void Init(bool useResize)
         {
             _resizeTools = new ResizeTool[] {
                 //iOS
@@ -32,34 +49,26 @@ namespace Syy.Tools.GameViewSizeTool
                 new ResizeTool(this, "GalaxyS8", 1440, 2960),
             };
 
-            if (EditorPrefs.HasKey(Key_GameViewSizeChanger_Orientation))
+            if (useResize)
             {
-                _orientation = (Orientation)EditorPrefs.GetInt(Key_GameViewSizeChanger_Orientation);
-            }
+                if (Save.ContainsKey(Key_GameViewSizeChanger_Orientation))
+                {
+                    _orientation = Save.Get<Orientation>(Key_GameViewSizeChanger_Orientation);
+                }
 
-            // 前回使ったGameViewSizeがあれば適用する
-            if (EditorPrefs.HasKey(Key_GameViewSizeChanger_LastLabel))
-            {
-                var label = EditorPrefs.GetString(Key_GameViewSizeChanger_LastLabel);
-                var tool = _resizeTools.FirstOrDefault(value => value.Label == label);
-                tool?.Resize();
-                _activeTool = tool;
-                // Resize()するとこのwindowがUnityEditorの背面に回ってしまうためForcusする
-                Focus();
-            }
-        }
-
-        void OnDisable()
-        {
-            foreach (var tool in _resizeTools)
-            {
-                tool.Dispose();
+                // 前回使ったGameViewSizeがあれば適用する
+                if (Save.ContainsKey(Key_GameViewSizeChanger_LastLabel))
+                {
+                    if (!EditorApplication.isPlaying && !EditorApplication.isCompiling && !EditorApplication.isPlayingOrWillChangePlaymode)
+                    {
+                        var label = Save.Get<string>(Key_GameViewSizeChanger_LastLabel);
+                        var tool = _resizeTools.FirstOrDefault(value => value.Label == label);
+                        tool?.Resize();
+                        _activeTool = tool;
+                    }
+                }
             }
         }
-
-        [SerializeField]
-        Orientation _orientation;
-        public Orientation Orientation => _orientation;
 
         void OnGUI()
         {
@@ -73,7 +82,7 @@ namespace Syy.Tools.GameViewSizeTool
                 }
                 if (check.changed)
                 {
-                    EditorPrefs.SetInt(Key_GameViewSizeChanger_Orientation, (int)_orientation);
+                    Save.Set<Orientation>(Key_GameViewSizeChanger_Orientation, _orientation);
                 }
             }
 
@@ -99,6 +108,34 @@ namespace Syy.Tools.GameViewSizeTool
                 _orientation = orientation;
                 _activeTool?.Resize();
             }
+        }
+    }
+
+    public static class Save
+    {
+        public static bool ContainsKey(string key)
+        {
+            return !string.IsNullOrEmpty(EditorUserSettings.GetConfigValue(key));
+        }
+
+        public static T Get<T>(string key)
+        {
+            string value = EditorUserSettings.GetConfigValue(key);
+            Type type = typeof(T);
+            if (type.IsEnum)
+            {
+                return (T)Enum.Parse(type, value);
+            }
+            if (type == typeof(int))
+            {
+                return (T)(object)int.Parse(value);
+            }
+            return (T)(object)value;
+        }
+
+        public static void Set<T>(string key, T value)
+        {
+            EditorUserSettings.SetConfigValue(key, value.ToString());
         }
     }
 
